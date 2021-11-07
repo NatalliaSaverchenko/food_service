@@ -1,9 +1,9 @@
-const cardRestaurants = document.querySelector('.cards-restaurants')
+const partners = () => {
+  const cardRestaurants = document.querySelector('.cards-restaurants')
 // console.dir(cardRestaurants)
 
 const renderItems = (data) => {
   data.forEach((item) => {
-    console.log(item)
     const a = document.createElement('a')
 
     a.setAttribute('href', '/restaurant.html')
@@ -42,3 +42,6 @@ fetch('https://food-service-78c40-default-rtdb.firebaseio.com/db/partners.json')
   .then((response) => response.json())
   .then((data) => renderItems(data))
   .catch((e) => console.log(e))
+
+}
+export default partners

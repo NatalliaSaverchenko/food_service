@@ -1,4 +1,5 @@
-const buttonAuth = document.querySelector('.button-auth')
+const auth = () => {
+  const buttonAuth = document.querySelector('.button-auth')
 const modalAuth = document.querySelector('.modal-auth')
 const buttonOut = document.querySelector('.button-out')
 
@@ -54,3 +55,6 @@ buttonOut.addEventListener('click', () => {
 if (localStorage.getItem('user')) {
   login(JSON.parse(localStorage.getItem('user')))
 }
+
+}
+export default auth
