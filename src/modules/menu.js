@@ -5,7 +5,7 @@ const menu = () => {
   //   const restaurantTitle = document.querySelector('.restaurant-title')
   //   restaurantTitle.textContent=restaurant.name
   // }
-  
+
   const changeHeading = (restaurant) => {
     const reustaurantHeading = document.querySelector('.section-heading')
     reustaurantHeading.innerHTML = `	
@@ -17,17 +17,31 @@ const menu = () => {
       <div class="price">От ${restaurant.price} ₽</div>
       <div class="category">${restaurant.kitchen}</div>
     </div>`
-  
-  
   }
-  
+
+  const addToCart = (cartItem) => {
+  const cartArray = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : []
+
+    // console.log(cartItem)
+    if (cartArray.some((item) => item.id === cartItem.id)) {
+      cartArray.map((item) => {
+        if (item.id === cartItem.id) {
+          item.count++
+        }
+
+        return item
+      })
+    } else {
+      cartArray.push(cartItem)
+    }
+    localStorage.setItem('cart', JSON.stringify(cartArray))
+  }
   const renderItems = (data) => {
-    data.forEach(({description, id, image, name, price}) => {
+    data.forEach(({ description, id, image, name, price }) => {
       const card = document.createElement('div')
       card.classList.add('card')
-  
-      card.innerHTML=
-      `
+
+      card.innerHTML = `
       <img src=${image} alt=${name} class="card-image" />
               <div class="card-text">
                 <div class="card-heading">
@@ -45,23 +59,27 @@ const menu = () => {
                 </div>
               </div>
       `
-      cardsMenu.append(card)  })
-      // console.log(card)})
-      
+      card.querySelector('.button-card-text').addEventListener('click', () => {
+        const cartItem = { id, name, price, count: 1 }
+        addToCart(cartItem)
+      })
+      cardsMenu.append(card)
+    })
+    // console.log(card)})
   }
-  if (localStorage.getItem('restaurant')){
+  if (localStorage.getItem('restaurant')) {
     const reustaurant = JSON.parse(localStorage.getItem('restaurant'))
-  
+
     changeHeading(reustaurant)
-  
-    fetch(`https://food-service-78c40-default-rtdb.firebaseio.com/db/${reustaurant.products}`)
-    .then((response) => response.json())
-    .then((data) => renderItems(data))
-    .catch((e) => console.log(e))
+
+    fetch(
+      `https://food-service-78c40-default-rtdb.firebaseio.com/db/${reustaurant.products}`
+    )
+      .then((response) => response.json())
+      .then((data) => renderItems(data))
+      .catch((e) => console.log(e))
   } else {
-    window.location.href='/'
+    window.location.href = '/'
   }
-  
-  
 }
 export default menu
